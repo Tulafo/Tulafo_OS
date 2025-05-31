@@ -14,7 +14,7 @@ void init(){
 }
 
 
-extern "C" int main(){
+extern int main(){
     init();
 
     while(1){

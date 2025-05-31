@@ -1,3 +1,5 @@
+#pragma once
+
 #include "../lib/integer.h"
 #include "../lib/string.h"
 
@@ -30,7 +32,7 @@ enum Video_Modes {
 typedef struct  {
     uint8_t x;
     uint8_t y;
-    bool invalid = false;
+    bool invalid;
 
 } Screen_Coordinates;
 
@@ -38,14 +40,14 @@ uint8_t inb(uint16_t port);
 void outb(uint16_t port, int8_t value);
 
 
-void printf(char* in_str, uint16_t start_location = cursor_position, bool update_cursor = true);
-void printstr(string in_str, uint16_t start_location = cursor_position, bool update_cursor = true);
-void printch(char character, uint16_t position = cursor_position, bool update_cursor = true);
-void hex_print(size_t number, uint16_t position = cursor_position, bool update_cursor = true);
+void printf(char* in_str, uint16_t start_location, bool update_cursor);
+void printstr(string in_str, uint16_t start_location, bool update_cursor);
+void printch(char character, uint16_t position, bool update_cursor);
+void hex_print(size_t number, uint16_t position, bool update_cursor);
 void clear_screen();
-void erase(uint16_t pos = cursor_position -1, bool update_cursor = true);
+void erase(uint16_t pos, bool update_cursor);
 uint16_t get_screen_linear_position(Screen_Coordinates coords);
 Screen_Coordinates get_screen_coordinates(uint16_t linear);
-uint16_t get_screen_linear_position(uint8_t x, uint8_t y);
+uint16_t get_screen_linear_position_raw(uint8_t x, uint8_t y);
 
 void init_io();

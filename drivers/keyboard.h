@@ -1,7 +1,9 @@
+#pragma once
+
 #include "../kernel/io.h"
 #include "../lib/integer.h"
 
-enum Keys{
+typedef enum{
     KEY_NULL  =   0x00,
 
     KEY_ESCAPE =  0x01,
@@ -109,7 +111,7 @@ enum Keys{
     KEY_DEP2 = 0x55,
     KEY_DEP3 = 0x56
 
-};
+} Keys;
 
 typedef struct{
     Keys key;

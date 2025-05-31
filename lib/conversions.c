@@ -126,7 +126,7 @@ string to_str_h(long int in_num){
 
 
 
-long int to_int(char* in_str){
+long int to_int_c(char* in_str){
     int len = len_str(in_str);
 
     char* data = in_str;

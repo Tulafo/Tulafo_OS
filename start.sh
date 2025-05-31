@@ -31,7 +31,7 @@ cd ..
 
 # Compile kernel files
 for dir in ./kernel ./lib ./drivers; do
-    for in_file in "$dir"/*.cpp; do
+    for in_file in "$dir"/*.c; do
         if [[ -f "$in_file" ]]; then
             echo "Compiling: $in_file"
 

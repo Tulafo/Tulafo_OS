@@ -1,3 +1,5 @@
+#pragma once
+
 #ifdef __INT8_TYPE__
     typedef __INT8_TYPE__ int8_t;
     typedef __UINT8_TYPE__ uint8_t;
@@ -36,5 +38,10 @@
 
 
 #define NULL 0
+
+typedef enum {
+    false = 0,
+    true = 1
+} bool;
 
 

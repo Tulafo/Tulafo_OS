@@ -38,7 +38,7 @@ string new_str(char* data){
     return out_str;
 }
 
-string new_str(size_t len){
+string new_str_buffer(size_t len){
     string out_str;
 
     out_str.data = (char*)malloc(len);
@@ -52,7 +52,7 @@ string new_str(size_t len){
     return out_str;
 }
 
-size_t find(string* src, char ch, size_t beg){
+size_t find_char(string* src, char ch, size_t beg){
     for(size_t i = beg; i < src->len; i++)
         if(src->data[i] = ch)
             return i+1;
@@ -60,7 +60,7 @@ size_t find(string* src, char ch, size_t beg){
     return 0;
 }
 
-size_t find(string* src, string* substr, size_t beg){
+size_t find_substr(string* src, string* substr, size_t beg){
     bool found = false;
 
     for(size_t i = beg; i < src->len; i++){

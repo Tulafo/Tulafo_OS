@@ -3,6 +3,7 @@
 #include "io.h"
 #include "../lib/string.h"
 #include "../lib/conversions.h"
+#include "../drivers/keyboard.h"
 
 string in_buffer;
 
@@ -25,11 +26,11 @@ void init_console(){
 
 
 void eval_buffer(){
-    printch('\n');
+    printch('\n', cursor_position, true);
 
-    printf("You have written: \"");
-    printstr(in_buffer);
-    printf("\"\n");
+    printf("You have written: \"", cursor_position, true);
+    printstr(in_buffer, cursor_position, true);
+    printf("\"\n", cursor_position, true);
     
     in_buffer.len = 0;
 }
@@ -70,7 +71,7 @@ bool console_in(){
                 break;
             }
 
-            printch(' ');
+            printch(' ', cursor_position, true);
             in_buffer.data[in_buffer.len] = ' ';
             in_buffer.len++;
         }
@@ -81,7 +82,7 @@ bool console_in(){
             in_buffer.len--;
             in_buffer.data[in_buffer.len] = 0;
 
-            erase();
+            erase(cursor_position, true);
         }
     }
 
@@ -90,7 +91,7 @@ bool console_in(){
             in_buffer.data[in_buffer.len] = ch;
             in_buffer.len++;
             
-            printch(ch);
+            printch(ch, cursor_position, true);
         }
     }   
 

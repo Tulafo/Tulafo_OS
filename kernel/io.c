@@ -2,16 +2,11 @@
 #include "../lib/conversions.h"
 #include "../lib/math.h"
 #include "../lib/string.h"
-#include "../lib/kbd_layouts.h"
+#include "../drivers/kbd_layouts.h"
 
 
 uint16_t cursor_position = 0;
 uint8_t video_mode = LIGHTGRAY_BLAK;
-
-bool lshift = false;
-bool rshift = false;
-bool lctrl = false;
-bool lalt = false;
 
 
 uint8_t inb(uint16_t port) {
@@ -29,17 +24,6 @@ void move_cursor(uint32_t offset){
     outb(CRT_INDEX_REG, CURSOR_HIGH_BYTE);
     outb(CRT_DATA_REG, (offset >> 8) & 0xFF);
 
-}
-void move_cursor(Screen_Coordinates coords){
-    long offset = get_screen_linear_position(coords);
-
-    if(offset == -1)
-        return
-
-    move_cursor(offset);
-}
-void update_cursor_pos(){
-    move_cursor(cursor_position);
 }
 
 void new_line(){
@@ -68,7 +52,7 @@ void printf(char* in_str, uint16_t start_location, bool update_cursor){
             cursor_position++;
         }
 
-        update_cursor_pos();
+        move_cursor(cursor_position);
     }
 
     else{
@@ -114,7 +98,7 @@ void printstr(string in_str, uint16_t start_location, bool update_cursor){
             cursor_position++;
         }
 
-        update_cursor_pos();
+        move_cursor(cursor_position);
     }
 
     else{
@@ -141,7 +125,7 @@ void printch(char character, uint16_t position, bool update_cursor){
 
     if(character == '\n' && update_cursor){
         new_line();
-        update_cursor_pos();
+        move_cursor(cursor_position);
         return;
     }
 
@@ -155,7 +139,7 @@ void printch(char character, uint16_t position, bool update_cursor){
 
     if(update_cursor){
         ++cursor_position;
-        update_cursor_pos();
+        move_cursor(cursor_position);
     }
 }
 
@@ -164,11 +148,12 @@ void hex_print(size_t number, uint16_t position, bool update_cursor){
 }
 
 void erase(uint16_t pos, bool update_cursor){
+    --pos;
     printch(' ', pos, false);
 
     if(update_cursor){
         cursor_position = pos;
-        update_cursor_pos();
+        move_cursor(cursor_position);
     }
 }
 
@@ -190,7 +175,7 @@ uint16_t get_screen_linear_position(Screen_Coordinates coords){
     return y*(uint16_t)SCREEN_LENGTH + x;
 }
 
-uint16_t get_screen_linear_position(uint8_t x, uint8_t y){
+uint16_t get_screen_linear_position_raw(uint8_t x, uint8_t y){
     if(x >= SCREEN_LENGTH || y >= SCREEN_HEIGHT)
         return - 1;
 
@@ -221,5 +206,5 @@ Screen_Coordinates get_screen_coordinates(uint16_t linear){
 void init_io(){
     video_mode = LIGHTGRAY_BLAK;
     cursor_position = 0;
-    update_cursor_pos();
+    move_cursor(cursor_position);
 }

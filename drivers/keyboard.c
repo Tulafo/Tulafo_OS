@@ -1,3 +1,12 @@
+#include "keyboard.h"
+#include "kbd_layouts.h"
+
+bool lshift = false;
+bool rshift = false;
+bool lctrl = false;
+bool lalt = false;
+
+
 uint8_t get_keyboard_code(){
     if(inb(0x64) & 1)
         return inb(0x60);
@@ -60,9 +69,6 @@ Key_Info get_key_info(uint8_t scancode){
         out.shift = lshift || rshift;
         out.ctrl = lctrl;
         out.alt = lalt;
-        
-        out.ch = kbd_US[scancode];
-
         return out;
         
     }
@@ -72,13 +78,22 @@ Key_Info get_key_info(uint8_t scancode){
     }
 }
 
+
 char get_char(Key_Info key){
-    if(key.ch != 0){
+    if(key.key != KEY_NULL){
+        
+
         if(key.shift){
-            return kbd_US_shift[key.key];
+            if(key.alt){
+                return qwerty_us_layout[key.key].shift_alt_gr;
+            }
+            return qwerty_us_layout[key.key].shift;
+        }
+        else if(key.alt){
+            return qwerty_us_layout[key.key].alt_gr;
         }
 
-        return kbd_US[key.key];
+        return qwerty_us_layout[key.key].base;
     }
 
     return 0;
