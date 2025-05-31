@@ -19,7 +19,7 @@ void init_console(){
         return;
     }
 
-    in_buffer = new_str(IN_BUFF_SIZE);
+    in_buffer = new_str_buffer(IN_BUFF_SIZE);
     in_buffer.len = 0;
     initialized = true;
 }

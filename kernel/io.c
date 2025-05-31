@@ -197,12 +197,6 @@ Screen_Coordinates get_screen_coordinates(uint16_t linear){
 
 
 
-
-
-
-
-
-
 void init_io(){
     video_mode = LIGHTGRAY_BLAK;
     cursor_position = 0;

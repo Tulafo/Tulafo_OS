@@ -133,7 +133,7 @@ bool memcpy(void* dest, void* src, size_t bytes){
 }
 
 bool free(void* ptr){
-    if (!mem_initialized ||  (int8_t*)MEM_START > ptr || ptr > (int8_t*)MEM_TOP){
+    if (!mem_initialized ||  (int8_t*)MEM_START > (int8_t*)ptr || (int8_t*)ptr > (int8_t*)MEM_TOP){
         return false;
     }
 
