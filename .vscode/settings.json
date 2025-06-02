@@ -1,9 +1,0 @@
-{
-    "files.associations": {
-        "cmath": "cpp",
-        "cstdint": "cpp",
-        "system_error": "cpp",
-        "compare": "cpp"
-    },
-    "C_Cpp.errorSquiggles": "disabled"
-}
