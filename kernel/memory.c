@@ -1,6 +1,5 @@
 #include "memory.h"
-#include "io.h"
-#include "../lib/integer.h"
+#include "../lib/stdint.h"
 #include "../lib/conversions.h"
 
 

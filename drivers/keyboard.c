@@ -6,13 +6,45 @@ bool rshift = false;
 bool lctrl = false;
 bool lalt = false;
 
-
-uint8_t get_keyboard_code(){
-    if(inb(0x64) & 1)
+uint16_t get_keyboard_byte(){
+    if (inb(0x64) & 1)
         return inb(0x60);
 
-    else
-        return 0;
+    return SCANCODE_NONE;
+}
+
+uint16_t get_keyboard_code() {
+    uint16_t code = get_keyboard_byte();
+    
+    if(code == 0xE0){
+        uint16_t byte;
+        do{
+            byte = get_keyboard_byte();
+        } while(byte == SCANCODE_NONE);
+
+        return (code << 8) + byte;
+    }
+
+    return code;
+}
+
+Key_Event generate_key_event(uint8_t scancode){
+    Key_Event out;
+    out.key = KEY_NULL;
+    out.pressed = true;
+
+    if(REL_ESCAPE <= scancode && scancode <= REL_DEP3){
+        out.pressed = false;
+        out.key = (Keys)(scancode - 0x80);
+        return out;
+    }
+
+    else if(KEY_ESCAPE <= scancode && scancode <= KEY_DEP3){
+        out.key = scancode;
+        return out;
+    }
+
+    return out;
 }
 
 Key_Info get_key_info(uint8_t scancode){

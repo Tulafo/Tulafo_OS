@@ -1,9 +1,9 @@
 #include "shell.h"
 #include "memory.h"
-#include "io.h"
 #include "../lib/string.h"
 #include "../lib/conversions.h"
 #include "../drivers/keyboard.h"
+#include "../drivers/video.h"
 
 string in_buffer;
 
@@ -28,9 +28,7 @@ void init_console(){
 void eval_buffer(){
     printch('\n', cursor_position, true);
 
-    printf("You have written: \"", cursor_position, true);
     printstr(in_buffer, cursor_position, true);
-    printf("\"\n", cursor_position, true);
     
     in_buffer.len = 0;
 }
@@ -41,7 +39,7 @@ bool console_in(){
         return false;
     }
 
-    uint8_t code = get_keyboard_code();
+    uint8_t code = get_keyboard_byte();
     
     if(!code){
         return false;

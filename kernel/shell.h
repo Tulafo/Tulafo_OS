@@ -1,4 +1,4 @@
-#include "../lib/integer.h"
+#include "../lib/stdbool.h"
 
 #define IN_BUFF_SIZE 256
 

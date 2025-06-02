@@ -1,5 +1,5 @@
 #include "../kernel/info.h"
-#include "../lib/integer.h"
+#include "../lib/stdint.h"
 
 
 

@@ -1,7 +1,10 @@
 #pragma once
 
-#include "../kernel/io.h"
-#include "../lib/integer.h"
+#include "io.h"
+#include "../lib/stdint.h"
+#include "../lib/stdbool.h"
+
+#define SCANCODE_NONE 0
 
 typedef enum{
     KEY_NULL  =   0x00,
@@ -113,15 +116,133 @@ typedef enum{
 
 } Keys;
 
+typedef enum{
+    REL_ESCAPE =  0x81,
+
+    REL_D1 = 0x82,
+    REL_D2 = 0x83,
+    REL_D3 = 0x84,
+    REL_D4 = 0x85,
+    REL_D5 = 0x86,
+    REL_D6 = 0x87,
+    REL_D7 = 0x88,
+    REL_D8 = 0x89,
+    REL_D9 = 0x8A,
+    REL_D0 = 0x8B,
+    REL_MINUS = 0x8C,
+    REL_EQUAL = 0x8D,
+    REL_BACKSPACE = 0x8E,
+
+
+    REL_TAB = 0x8F,
+    REL_Q = 0x90,
+    REL_W = 0x91,
+    REL_E = 0x92,
+    REL_R = 0x93,
+    REL_T = 0x94,
+    REL_Y = 0x95,
+    REL_U = 0x96,
+    REL_I = 0x97,
+    REL_O = 0x98,
+    REL_P = 0x99,
+    REL_OSB = 0x9A,     //Open square brackets
+    REL_CSB = 0x9B,     //Close square brackets
+
+    REL_RETURN = 0x9C,
+
+    REL_LCTRL = 0x9D,
+
+    REL_A = 0x9E,
+    REL_S = 0x9F,
+    REL_D = 0xA0,
+    REL_F = 0xA1,
+    REL_G = 0xA2,
+    REL_H = 0xA3,
+    REL_J = 0xA4,
+    REL_K = 0xA5,
+    REL_L = 0xA6,
+    REL_SEMICOLON = 0xA7,
+    REL_QUOTE = 0xA8,
+
+    REL_BACKTICK = 0xA9,
+
+    REL_LSHIFT = 0xAA,
+
+    REL_BACKSLASH = 0xAB,
+
+
+    REL_Z = 0xAC,
+    REL_X = 0xAD,
+    REL_C = 0xAE,
+    REL_V = 0xAF,
+    REL_B = 0xB0,
+    REL_N = 0xB1,
+    REL_M = 0xB2,
+    REL_COMMA = 0xB3,
+    REL_DOT = 0xB4,
+    REL_SLASH = 0xB5,
+    REL_RSHIFT = 0xB6,
+
+    REL_KP_ASTERISK = 0xB7,  
+    REL_LALT = 0xB8,
+    REL_SPACEBAR = 0xB9,
+
+    REL_CAPSLOC = 0xBA,
+
+    REL_F1 = 0xBB,
+    REL_F2 = 0xBC,
+    REL_F3 = 0xBD,
+    REL_F4 = 0xBE,
+    REL_F5 = 0xBF,
+    REL_F6 = 0xC0,
+    REL_F7 = 0xC1,
+    REL_F8 = 0xC2,
+    REL_F9 = 0xC3,
+    REL_F10 = 0xC4,
+    REL_F11 = 0xD7,
+    REL_F12 = 0xD8,
+
+    REL_NUMLOCK = 0xC5,
+    REL_SCROLLLOCK = 0xC6,
+    REL_HOME = 0xC7,
+    REL_UP = 0xC8,
+    REL_PGUP = 0xC9,
+    REL_KP_MINUS = 0xCA,
+    REL_LEFT = 0xCB,
+    REL_KP_CENTER = 0xCC,
+    REL_RIGHT = 0xCD,
+    REL_KP_PLUS = 0xCE,
+    REL_END = 0xCF,
+    REL_DOWN = 0xD0,
+    REL_PGDN = 0xD1,
+    REL_INS = 0xD2,
+    REL_DEL = 0xD3,
+
+    REL_DEP1 = 0xD4,
+    REL_DEP2 = 0xD5,
+    REL_DEP3 = 0xD6
+
+} Keys_rel;
+
+typedef struct
+{
+    Keys key;
+    bool pressed;
+} Key_Event;
+
+
 typedef struct{
     Keys key;
+    bool released;
     bool ctrl;
     bool shift;
     bool alt;
   
 } Key_Info;
 
-uint8_t get_keyboard_code();
+uint16_t get_keyboard_byte();
+uint16_t get_keyboard_code();
+Key_Event generate_key_event(uint8_t scancode);
 Key_Info get_key_info(uint8_t scancode);
 char get_char(Key_Info key);
 
