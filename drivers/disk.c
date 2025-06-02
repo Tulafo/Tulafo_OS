@@ -18,12 +18,19 @@ int8_t disk_read_sectors(int8_t drive, uint32_t start_sector, uint32_t count, vo
     outb(ATA_PRIMARY_IO + 7, 0x20);                         // Read sectors command
 
 
-    while (1) {
-        uint8_t status = inb(ATA_PRIMARY_IO + 7);
-        if ((status & 0x08) && !(status & 0x80)) break; 
+    for(uint32_t sector = 0; sector < count; sector++) {
+        // Wait for drive to be ready for this sector
+        while (1) {
+            uint8_t status = inb(ATA_PRIMARY_IO + 7);
+            if (status & 0b00000001) return 0; // Checks for error bit, returns 0 if set
+            if ((status & 0b00001000) && !(status & 0x10000000)) break; // Checks if data is ready (DRQ bit set) and drive is not busy (BSY bit clear)
+        }
+        
+        // Read one sector
+        for(size_t i = 0; i < (ATA_SECTOR_SIZE / 2); i++) {
+            buf16[sector * (ATA_SECTOR_SIZE / 2) + i] = inw(ATA_PRIMARY_IO);
+        }
     }
-
-    uint16_t* buf16 = (uint16_t*) buffer;
-    for(size_t i = 0; i < ATA_SECTOR_SIZE; i++)
-        buf16[i] = inw(ATA_PRIMARY_IO);
+    
+    return 1;
 }
