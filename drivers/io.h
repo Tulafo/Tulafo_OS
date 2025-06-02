@@ -1,0 +1,18 @@
+#pragma once
+
+#include "../lib/stdint.h"
+#include "disk.h"
+
+extern uint8_t inb(uint16_t port);
+extern void outb(uint16_t port, int8_t value);
+
+extern uint16_t inw(uint16_t port);
+extern void outw(uint16_t port, int16_t value);
+
+extern uint32_t indw(uint16_t port);
+extern void outdw(uint16_t port, int32_t value);
+
+extern insw(uint16_t port, uint8_t* buffer);
+
+
+void init_io();

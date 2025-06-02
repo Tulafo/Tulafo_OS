@@ -1,6 +1,5 @@
-#pragma once
-
-#include "../lib/integer.h"
+#include "../lib/stdint.h"
+#include "../lib/stdbool.h"
 #include "../lib/string.h"
 
 #define VIDEO_MEMORY_START 0xB8000
@@ -15,11 +14,10 @@
 #define CURSOR_LOW_BYTE 0x0F
 #define CURSOR_HIGH_BYTE 0x0E
 
+
+
 extern uint16_t cursor_position;
 extern uint8_t video_mode;
-
-
-
 
 enum Video_Modes {
     WHITE_BLACK     =   0b00001111,
@@ -36,8 +34,6 @@ typedef struct  {
 
 } Screen_Coordinates;
 
-uint8_t inb(uint16_t port);
-void outb(uint16_t port, int8_t value);
 
 
 void printf(char* in_str, uint16_t start_location, bool update_cursor);
@@ -50,4 +46,4 @@ uint16_t get_screen_linear_position(Screen_Coordinates coords);
 Screen_Coordinates get_screen_coordinates(uint16_t linear);
 uint16_t get_screen_linear_position_raw(uint8_t x, uint8_t y);
 
-void init_io();
+void init_video();

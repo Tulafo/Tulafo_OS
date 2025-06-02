@@ -1,6 +1,3 @@
-#include "keyboard.h"
-#include "../lib/integer.h"
-
 typedef struct {
     char base;          
     char shift;        
@@ -47,6 +44,7 @@ static KeyMapping qwerty_us_layout[128] = {
     [KEY_D9] = {'9', '(', 0, 0},
     [KEY_D0] = {'0', ')', 0, 0},
 
+    [KEY_SPACEBAR] = {' ', ' ', ' ',' '},
     [KEY_MINUS] = {'-', '_', 0, 0},
     [KEY_EQUAL] = {'=', '+', 0, 0},
     [KEY_OSB] = {'[', '{', 0, 0},

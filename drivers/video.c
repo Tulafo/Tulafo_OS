@@ -1,29 +1,17 @@
+#include "video.h"
 #include "io.h"
-#include "../lib/conversions.h"
-#include "../lib/math.h"
 #include "../lib/string.h"
-#include "../drivers/kbd_layouts.h"
-
+#include "../lib/conversions.h"
 
 uint16_t cursor_position = 0;
 uint8_t video_mode = LIGHTGRAY_BLAK;
 
-
-uint8_t inb(uint16_t port) {
-    uint8_t result;
-    asm volatile ("in %1, %0" : "=a"(result) : "d"(port));
-    return result;
-}
-void outb(uint16_t port, int8_t value) {
-    asm volatile ("out %0, %1" : : "a"(value), "Nd"(port));
-}
 
 void move_cursor(uint32_t offset){
     outb(CRT_INDEX_REG, CURSOR_LOW_BYTE);
     outb(CRT_DATA_REG, offset & 0x00FF);
     outb(CRT_INDEX_REG, CURSOR_HIGH_BYTE);
     outb(CRT_DATA_REG, (offset >> 8) & 0xFF);
-
 }
 
 void new_line(){
@@ -196,8 +184,7 @@ Screen_Coordinates get_screen_coordinates(uint16_t linear){
 }
 
 
-
-void init_io(){
+void init_video(){
     video_mode = LIGHTGRAY_BLAK;
     cursor_position = 0;
     move_cursor(cursor_position);
