@@ -1,6 +1,6 @@
 #pragma once
 
-#include "integer.h"
+#include "stdint.h"
 
 typedef struct{
     unsigned int len;

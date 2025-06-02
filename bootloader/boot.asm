@@ -105,27 +105,27 @@ times 446-($-$$) db 0
 
 partition1:
     db 0x80                 ; Boot flag (0x80 = bootable, 0x00 = not bootable)
-    db 0x01, 0x01, 0x00     ; CHS start (head 1, sector 1, cylinder 0)
+    db 0xFF, 0xFF, 0xFF     ; CHS start (dummy)
     db 0x0C                 ; Partition type (0x0C = FAT32 (LBA))
-    db 0x0F, 0x3F, 0x0C     ; CHS end (head 15, sector 63, cylinder 12)
+    db 0xFF, 0xFF, 0xFF     ; CHS end (dummy)
     dd 0x00000800           ; LBA start (sector 2048)
     dd 0x00100000           ; Size in sectors (512MB)
 
 partition2:
-    db 0x00                 ; Not bootable
-    db 0x00, 0x00, 0x00     ; CHS start
-    db 0x00                 ; Unused
-    db 0x00, 0x00, 0x00     ; CHS end
-    dd 0x00000000           ; LBA start
-    dd 0x00000000           ; Size
+    db 0x00                         ; Not bootable
+    db 0xFF, 0xFF, 0xFF             ; (dummy)
+    db 0x0C                         ; FAT32 (LBA)
+    db 0xFF, 0xFF, 0xFF             ; (dummy)
+    dd 0x00100801                   ; Start right after partition 1 
+    dd 0xFFFFFFFF - 0x00100801      ; Size
 
 partition3:
-    db 0x00                 ; Not bootable
-    db 0x00, 0x00, 0x00     ; CHS start
-    db 0x00                 ; Unused
-    db 0x00, 0x00, 0x00     ; CHS end
-    dd 0x00000000           ; LBA start
-    dd 0x00000000           ; Size
+    db 0x00                 
+    db 0x00, 0x00, 0x00     
+    db 0x00                 
+    db 0x00, 0x00, 0x00     
+    dd 0x00000000          
+    dd 0x00000000           
 
 partition4:
     db 0x00                 ; Not bootable

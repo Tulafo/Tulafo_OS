@@ -27,11 +27,19 @@ cat "stage_1.bin" "stage_2.bin" > "../boot.bin"
 rm "stage_1.bin" "stage_2.bin"
 cd ..
 
+boot_filesize=$(stat -c%s ./boot.bin)
+padding_size=$((1048576 - boot_filesize))
+
+dd if=/dev/zero of=padding.bin bs=1 count=$padding_size
+cat boot.bin padding.bin >> full_boot.bin
+rm boot.bin padding.bin
+
+mv full_boot.bin boot.bin
 
 
 # Compile kernel files
 for dir in ./kernel ./lib ./drivers; do
-    for in_file in "$dir"/*.c; do
+    for in_file in "$dir"/*.c "$dir"/*.cpp; do
         if [[ -f "$in_file" ]]; then
             echo "Compiling: $in_file"
 

@@ -1,7 +1,6 @@
 [bits 16]
 
 KERNEL_SECTORS equ 32
-KERNEL_FIRST_SECTOR equ 3
 
 
 load_kernel:
@@ -15,7 +14,7 @@ load_kernel:
     ; Set up disk packet
     mov word [sectors_to_load], KERNEL_SECTORS
     mov word [loading_offset], KERNEL_LOCATION
-    mov word [first_sector], KERNEL_FIRST_SECTOR    ; Load from fourth sector
+    mov word [first_sector], 0x800                  ; Start of boot partition
     mov word [first_sector + 2], 0                  ; Clear upper 6 bytes
     mov word [first_sector + 4], 0                  ; Clear upper 6 bytes
     mov word [first_sector + 6], 0                  ; Clear upper 6 bytes
@@ -31,14 +30,11 @@ load_kernel:
 
 
 .use_standard_calls:
-    mov ah, 0x02                    ; int 0x13 function to read sectors from disk
-    mov al, KERNEL_SECTORS          ; How many sectors to read (1-128), try increase if something breaks
-    mov ch, 0                       ; Cylinder number
-    mov cl, KERNEL_FIRST_SECTOR+1   ; Sector number
-    mov dh, 0                       ; Head number
-    mov dl, [BOOT_DISK]             ; Disk number
-    mov bx, KERNEL_LOCATION         ; Where to load kernel (duh)
-    int 0x13
+    mov ah, 0x0e
+    mov al, 'H'
+    int 0x10
+    jmp $
+
 
     jc error_loading_disk
 
