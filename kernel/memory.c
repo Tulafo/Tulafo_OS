@@ -49,6 +49,13 @@ int8_t map_get(size_t bit){
 }
 
 
+void* is_valid_ptr(*ptr){
+    if(MEM_START > ptr || ptr > MEM_TOP)
+        return nullptr;
+
+    return ptr;
+}
+
 
 void* malloc(size_t bytes){
     if(!mem_initialized){
@@ -111,9 +118,9 @@ void* malloc(size_t bytes){
     
 }
 
-bool memcpy(void* dest, void* src, size_t bytes){
+int8_t memcpy(void* dest, void* src, size_t bytes){
     if(!mem_initialized){
-        return false;
+        return 0;
     }
     
     /*if(is_in_rodata((int8_t*)dest) || is_in_code((int8_t*)dest)){
@@ -128,13 +135,12 @@ bool memcpy(void* dest, void* src, size_t bytes){
         *dp = *op;
     }
     
-    return true;
+    return 1;
 }
 
-bool free(void* ptr){
-    if (!mem_initialized ||  (int8_t*)MEM_START > (int8_t*)ptr || (int8_t*)ptr > (int8_t*)MEM_TOP){
-        return false;
-    }
+int8_t free(void* ptr){
+    if(!is_valid_ptr(ptr))
+        return 0;
 
     memory_header_t* header = (memory_header_t*)ptr - sizeof(memory_header_t);
     size_t blocks = header->blocks;
@@ -144,11 +150,10 @@ bool free(void* ptr){
 
     for(uint32_t i = start_block; i<start_block+blocks; i++){
         map_set(i, false);
-    } 
-
-    return true;
+    }
+    
+    return 1;
 }
-
 
 void* realloc(void* data, size_t bytes){
     if(!mem_initialized){
@@ -163,6 +168,9 @@ void* realloc(void* data, size_t bytes){
         free(data);
         return nullptr;
     }
+
+    if(!is_valid_ptr(ptr))
+        return nullptr;
 
 
     memory_header_t* header = (memory_header_t*)data - sizeof(memory_header_t);
@@ -195,6 +203,17 @@ void* realloc(void* data, size_t bytes){
 
     free(data);
     return out;
+}
+
+void* memset(void* ptr, uint8_t value, size_t count){
+    if((size_t)ptr > MEM_TOP - count){
+        return nullptr
+    }
+
+    for (uint8_t* i = ptr; i < ptr + (uint8_t*)count; i++)
+        *i = value;
+
+    return ptr;
 }
 
 

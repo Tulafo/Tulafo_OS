@@ -27,10 +27,12 @@ extern uint8_t __BSS_START[], __BSS_END[];
 
 extern char* mem_pos;
 
+void* is_valid_ptr(*ptr);
 void* malloc(size_t bytes);
-bool memcpy(void* dest, void* src, size_t bytes);
-bool free(void* ptr);
+int8_t memcpy(void* dest, void* src, size_t bytes);
+int8_t free(void* ptr);
 void* realloc(void* data, size_t bytes);
+void* memset(void* ptr, uint8_t value, size_t  count)
 
 
 void init_mem();

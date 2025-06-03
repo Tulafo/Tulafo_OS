@@ -3,9 +3,11 @@
 
 
 
-int8_t disk_read_sectors(int8_t drive, uint32_t start_sector, uint32_t count, void* buffer) {
+int8_t ATA_read_sectors(int8_t drive, uint32_t start_sector, uint32_t count, void* buffer) {
     if(!(drive == 0 || drive == 1))
         return 0;
+
+    uint16_t* buf16 = (uint16_t*)buffer;
 
     uint8_t last_byte = ((start_sector >> 24) & 0b00001111) | 0b11100000 | (drive  << 4);
 
