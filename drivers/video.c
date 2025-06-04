@@ -1,3 +1,4 @@
+#include <stdarg.h>
 #include "video.h"
 #include "io.h"
 #include "../lib/string.h"
@@ -20,7 +21,36 @@ void new_line(){
     cursor_position = line * SCREEN_LENGTH;
 }
 
-void printf(char* in_str, uint16_t start_location, bool update_cursor){
+
+void printch(char character, uint16_t position, bool update_cursor){
+
+    if(character == '\n' && update_cursor){
+        new_line();
+        move_cursor(cursor_position);
+        return;
+    }
+
+    else if(character == 0){
+        return;
+    }
+
+    uint32_t addr = VIDEO_MEMORY_START + position*2;
+    *(volatile int8_t*)addr = character;
+    *(volatile int8_t*)(addr+1) = video_mode;
+
+    if(update_cursor){
+        ++cursor_position;
+        move_cursor(cursor_position);
+    }
+}
+
+
+void putchar(char cahracter){
+    printch(cahracter, cursor_position, true);
+}
+
+
+void print_string(char* in_str, uint16_t start_location, bool update_cursor){
     if (update_cursor){
         cursor_position = start_location;
         
@@ -63,6 +93,7 @@ void printf(char* in_str, uint16_t start_location, bool update_cursor){
     }
     
 }
+
 
 void printstr(string in_str, uint16_t start_location, bool update_cursor){
     char* data = in_str.data;
@@ -109,31 +140,70 @@ void printstr(string in_str, uint16_t start_location, bool update_cursor){
     }
 }
 
-void printch(char character, uint16_t position, bool update_cursor){
-
-    if(character == '\n' && update_cursor){
-        new_line();
-        move_cursor(cursor_position);
-        return;
-    }
-
-    else if(character == 0){
-        return;
-    }
-
-    uint32_t addr = VIDEO_MEMORY_START + position*2;
-    *(volatile int8_t*)addr = character;
-    *(volatile int8_t*)(addr+1) = video_mode;
-
-    if(update_cursor){
-        ++cursor_position;
-        move_cursor(cursor_position);
-    }
+void print_decimal(size_t number, uint16_t position, bool update_cursor){
+    print_string(to_cstr(number), position, update_cursor);
 }
 
-void hex_print(size_t number, uint16_t position, bool update_cursor){
-    printf(to_cstr_h(number), position, update_cursor);
+
+void print_hex(size_t number, uint16_t position, bool update_cursor){
+    print_string(to_cstr_h(number), position, update_cursor);
 }
+
+
+void printf(const char* fmt, ...){
+    va_list args;
+    va_start(args, fmt);
+
+    for (const char* p = fmt; *p != '\0'; p++) {
+        if (*p != '%') {
+            putchar(*p);
+            continue;
+        }
+
+        p++; // Move past '%'
+
+        switch (*p) {
+            case 's': {
+                const char* str = va_arg(args, const char*);
+                print_string(str, cursor_position, true);
+                break;
+            }
+            case 'd': {
+                int val = va_arg(args, int);
+                print_decimal(val, cursor_position, true);
+                break;
+            }
+            case 'i': {
+                int val = va_arg(args, int);
+                print_decimal(val, cursor_position, true);
+                break;
+            }
+            case 'x': {
+                unsigned int val = va_arg(args, unsigned int);
+                print_hex(val, cursor_position, true);
+                break;
+            }
+            case 'c': {
+                char c = (char) va_arg(args, int); // `char` is promoted to `int` in varargs
+                putchar(c);
+                break;
+            }
+            case '%': {
+                putchar('%'); // Escaped percent "%%"
+                break;
+            }
+            default: {
+                // Unknown specifier, just print it
+                putchar('%');
+                putchar(*p);
+                break;
+            }
+        }
+    }
+
+    va_end(args);
+}
+
 
 void erase(uint16_t pos, bool update_cursor){
     --pos;

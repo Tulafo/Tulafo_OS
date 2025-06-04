@@ -36,10 +36,13 @@ typedef struct  {
 
 
 
-void printf(char* in_str, uint16_t start_location, bool update_cursor);
-void printstr(string in_str, uint16_t start_location, bool update_cursor);
 void printch(char character, uint16_t position, bool update_cursor);
-void hex_print(size_t number, uint16_t position, bool update_cursor);
+void putchar(char cahracter);
+void print_string(char* in_str, uint16_t start_location, bool update_cursor);
+void printstr(string in_str, uint16_t start_location, bool update_cursor);
+void print_decimal(size_t number, uint16_t position, bool update_cursor);
+void print_hex(size_t number, uint16_t position, bool update_cursor);
+void printf(const char* fmt, ...);
 void clear_screen();
 void erase(uint16_t pos, bool update_cursor);
 uint16_t get_screen_linear_position(Screen_Coordinates coords);
