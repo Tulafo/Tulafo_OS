@@ -27,14 +27,14 @@ cat "stage_1.bin" "stage_2.bin" > "../boot.bin"
 rm "stage_1.bin" "stage_2.bin"
 cd ..
 
-boot_filesize=$(stat -c%s ./boot.bin)
-padding_size=$((1048576 - boot_filesize))
+#boot_filesize=$(stat -c%s ./boot.bin)
+#padding_size=$((1048576 - boot_filesize))
 
-dd if=/dev/zero of=padding.bin bs=1 count=$padding_size
-cat boot.bin padding.bin >> full_boot.bin
-rm boot.bin padding.bin
+#dd if=/dev/zero of=padding.bin bs=1 count=$padding_size
+#cat boot.bin padding.bin >> full_boot.bin
+#rm boot.bin padding.bin
 
-mv full_boot.bin boot.bin
+#mv full_boot.bin boot.bin
 
 
 # Compile kernel files
@@ -73,23 +73,31 @@ for in_file in ./orgs/*.o; do
     fi
 done
 
+rm OS.bin
+
 echo "Linking..."
 
 "$COMPILER/i386-elf-ld" -T "linker.ld"  -Ttext 0x1000 -o "full_kernel.bin" $kernel_files --oformat binary
 
 
 cat "boot.bin" "full_kernel.bin" > "everything.bin"
-cat "everything.bin" "zeros.bin" > "OS.bin"
-rm "boot.bin" "full_kernel.bin" "everything.bin"
 
-dd if=/dev/zero of=OS.iso bs=1M count=10
-dd if=OS.bin of=OS.iso conv=notrunc
+OS_filesize=$(stat -c%s ./everything.bin)
+OS_padding_size=$((1048576 - OS_filesize))
+dd if=/dev/zero of=OS_padding.bin bs=1 count=$OS_padding_size
+cat "everything.bin" "OS_padding.bin" >> "OS.bin"
 
+rm "boot.bin" "full_kernel.bin" "everything.bin" "OS_padding.bin"
+
+
+
+#dd if=/dev/zero of=disk.img bs=1M count=1024
+#sudo losetup /dev/loop0 disk.img
 
 
 
 
 echo "Starting virtual machine"
 #qemu-system-x86_64 -drive format=raw,file="OS.bin",index=0,if=floppy -m 128M
-qemu-system-x86_64 -drive format=raw,file="OS.iso",index=0,if=ide -m 2G
+qemu-system-x86_64 -drive format=raw,file="OS.bin",index=0,if=ide -m 2G
 #qemu-system-x86_64 -cdrom OS.iso -m 128M

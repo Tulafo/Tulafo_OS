@@ -21,7 +21,7 @@ void init(){
 extern int main(){
     init();
 
-    
+    printf("%x", 50);
     return 1;
 }
 

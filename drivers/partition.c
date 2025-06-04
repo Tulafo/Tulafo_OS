@@ -1,6 +1,7 @@
 #include "partition.h"
 #include "disk.h"
 
+
 int8_t partition_read_mbr(uint8_t drive, mbr_t* mbr) {
     return ATA_read_sectors(drive, 0, 1, mbr);
 }

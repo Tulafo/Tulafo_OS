@@ -1,7 +1,8 @@
 [org 0x7e00]
 [bits 16]
 
-KERNEL_LOCATION equ 0x1000
+KERNEL_LOCATION equ 0x1000  ; Where to load in memory
+KERNEL_SECTORS equ 63
 
 _stage_2_start:
     mov [HARD_DISK], dh
@@ -11,6 +12,7 @@ _stage_2_start:
     call print_string
 
     call load_kernel
+    jc error_loading_kernel
 
     cli                     ;Disables interrupts
     lgdt [GDT_Descriptor]   ;Loads Global Descriptor Table
@@ -20,6 +22,24 @@ _stage_2_start:
     mov cr0, eax        ;yay, 32 bit mode protected mode!!
 
     jmp CODE_SEG:start_protected_mode
+
+
+error_loading_kernel:
+    call new_line
+    mov si, msg_err_lod_kernel
+    call print_string
+
+    mov si, msg_err_code
+    call print_string
+
+    mov al, ah
+    mov ah, 0
+    mov di, err_code
+    call num_to_string_hex
+    mov si, err_code
+    call print_string
+
+    jmp $
 
 
 [bits 32]
@@ -43,7 +63,7 @@ end:
 %include "print_string.asm"
 %include "invert_string.asm"
 %include "new_line.asm"
-%include "load_kernel.asm"
+%include "load_sectors.asm"
 %include "num_to_string.asm"
 %include "num_to_string_hex.asm"
 %include "GDT.asm"
@@ -69,9 +89,6 @@ BOOT_DISK:
 msg_loading:
     db 'Loading kernel...',0
 
-msg_loaded:
-    db 'Kernel loaded successfully!',0
-
 msg_sector_needed:
     db 'Sector needed: ',0
 
@@ -79,7 +96,7 @@ msg_sector_read:
     db 'Sector read: ',0
 
 msg_err_lod_kernel:
-    db 'Error loading kernel',0
+    db 'Error loading kernel    ',0
 
 msg_err_code:
     db 'Code ',0
