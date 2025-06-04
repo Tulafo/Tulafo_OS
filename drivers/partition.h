@@ -30,6 +30,6 @@ typedef struct {
     uint8_t type;
 } partition_t;
 
-int partition_read_mbr(uint8_t drive, mbr_t* mbr);
-int partition_enumerate(uint8_t drive, partition_t* partitions, int max_partitions);
+int8_t partition_read_mbr(uint8_t drive, mbr_t* mbr);
+int8_t partition_enumerate(uint8_t drive, partition_t* partitions, int max_partitions);
 

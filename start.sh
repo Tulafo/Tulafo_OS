@@ -16,7 +16,7 @@ fi
 # Delete old origin files to ensure nothig not supposed to gets liked by the linker
 echo "Deleting old orgs..."
 for f in ./orgs/*.o ; do
-    sudo rm -f "$f"
+    rm -f "$f"
 done
 
 echo "Compiling bootloader..."
@@ -82,7 +82,7 @@ cat "boot.bin" "full_kernel.bin" > "everything.bin"
 cat "everything.bin" "zeros.bin" > "OS.bin"
 rm "boot.bin" "full_kernel.bin" "everything.bin"
 
-sudo dd if=/dev/zero of=OS.iso bs=1M count=10
+dd if=/dev/zero of=OS.iso bs=1M count=10
 dd if=OS.bin of=OS.iso conv=notrunc
 
 
