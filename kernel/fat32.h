@@ -81,19 +81,19 @@ typedef struct {
 
 typedef struct {
     fat32_fs_t* fs;
-    uint32_t current_cluster;
-    uint32_t position;
-    uint32_t size;
+    uint32_t current_cluster; 
+    uint32_t position;          // Current readubg position
+    uint32_t size;              // Size in bytes
     bool is_directory;
     char name[256];
-} fat32_file_t;
+} fat32_dir_t;
 
-int fat32_mount(partition_t* partition, fat32_fs_t* fs);
+int8_t fat32_mount(partition_t* partition, fat32_fs_t* fs);
 void fat32_unmount(fat32_fs_t* fs);
 
-int fat32_open(fat32_fs_t* fs, const char* path, fat32_file_t* file);
-int fat32_read(fat32_file_t* file, void* buffer, size_t size);
-int fat32_write(fat32_file_t* file, const void* buffer, size_t size);
-void fat32_close(fat32_file_t* file);
+int fat32_open(fat32_fs_t* fs, const char* path, fat32_dir_t* file);
+int fat32_read(fat32_dir_t* file, void* buffer, size_t size);
+int fat32_write(fat32_dir_t* file, const void* buffer, size_t size);
+void fat32_close(fat32_dir_t* file);
 
-int fat32_readdir(fat32_file_t* dir, fat32_dir_entry_t* entry);
+int fat32_readdir(fat32_dir_t* dir, fat32_dir_entry_t* entry);

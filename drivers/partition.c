@@ -1,11 +1,11 @@
 #include "partition.h"
 #include "disk.h"
 
-int32_t partition_read_mbr(uint8_t drive, mbr_t* mbr) {
-    return disk_read_sectors(drive, 0, 1, mbr);
+int8_t partition_read_mbr(uint8_t drive, mbr_t* mbr) {
+    return ATA_read_sectors(drive, 0, 1, mbr);
 }
 
-int32_t partition_enumerate(uint8_t drive, partition_t* partitions, int max_partitions) {
+int8_t partition_enumerate(uint8_t drive, partition_t* partitions, int max_partitions) {
     mbr_t mbr;
     int count = 0;
     

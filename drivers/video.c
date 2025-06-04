@@ -50,7 +50,7 @@ void putchar(char cahracter){
 }
 
 
-void print_string(char* in_str, uint16_t start_location, bool update_cursor){
+void print_string(const char* in_str, uint16_t start_location, bool update_cursor){
     if (update_cursor){
         cursor_position = start_location;
         

@@ -1,9 +1,10 @@
 #include "../lib/stdint.h"
+#include "io.h"
 #include "disk.h"
 
 
 
-int8_t ATA_read_sectors(int8_t drive, uint32_t start_sector, uint32_t count, void* buffer) {
+int8_t ATA_read_sectors(uint8_t drive, uint32_t start_sector, uint32_t count, void* buffer) {
     if(!(drive == 0 || drive == 1))
         return 0;
 
