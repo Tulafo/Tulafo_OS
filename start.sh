@@ -90,14 +90,11 @@ cat "everything.bin" "OS_padding.bin" >> "OS.bin"
 rm "boot.bin" "full_kernel.bin" "everything.bin" "OS_padding.bin"
 
 
-
-#dd if=/dev/zero of=disk.img bs=1M count=1024
-#sudo losetup /dev/loop0 disk.img
-
+dd if=OS.bin of=OS.img bs=512 count=2048 conv=notrunc     # Copies booloader and kernel in reserved sectors
 
 
 
 echo "Starting virtual machine"
 #qemu-system-x86_64 -drive format=raw,file="OS.bin",index=0,if=floppy -m 128M
-qemu-system-x86_64 -drive format=raw,file="OS.bin",index=0,if=ide -m 2G
+qemu-system-x86_64 -drive format=raw,file="OS.img",index=0,if=ide -m 2G
 #qemu-system-x86_64 -cdrom OS.iso -m 128M

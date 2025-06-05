@@ -1,8 +1,9 @@
 [org 0x7e00]
 [bits 16]
 
+KERNEL_START_SECTOR equ 3   ; Starting sector of kernel
 KERNEL_LOCATION equ 0x1000  ; Where to load in memory
-KERNEL_SECTORS equ 63
+KERNEL_LEN_SECTORS equ 63   ; How many sectors to load
 
 _stage_2_start:
     mov [HARD_DISK], dh
@@ -11,8 +12,16 @@ _stage_2_start:
     mov si, msg_loading
     call print_string
 
-    call load_kernel
+    mov ax, KERNEL_LEN_SECTORS
+    mov bx, KERNEL_LOCATION
+    mov si, start_sector
+    mov word [si], KERNEL_START_SECTOR 
+    call load_sectors
     jc error_loading_kernel
+
+    call new_line
+    mov si, msg_loaded
+    call print_string
 
     cli                     ;Disables interrupts
     lgdt [GDT_Descriptor]   ;Loads Global Descriptor Table
@@ -60,6 +69,7 @@ end:
     jmp $
 
 
+
 %include "print_string.asm"
 %include "invert_string.asm"
 %include "new_line.asm"
@@ -68,17 +78,6 @@ end:
 %include "num_to_string_hex.asm"
 %include "GDT.asm"
 
-disk_packet:
-    db 0x10             ; Size of packet
-    db 0                ; Reserved
-sectors_to_load:
-    dw 0
-loading_offset:
-    dw 0                ; Memory ofset
-loading_segment:
-    dw 0                ; Memory segment
-first_sector:
-    dq 0                ; Sectors numbers starts from 0: first sector = sector 0
 
 HARD_DISK:
     db 0
@@ -88,6 +87,9 @@ BOOT_DISK:
 
 msg_loading:
     db 'Loading kernel...',0
+
+msg_loaded:
+    db 'Kernel loading success.',0
 
 msg_sector_needed:
     db 'Sector needed: ',0
@@ -103,5 +105,8 @@ msg_err_code:
 
 err_code:
     times 6 db 0
+
+start_sector:
+    dq 0
 
 times 1024 - ($-$$) db 0
