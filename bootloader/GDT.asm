@@ -4,16 +4,16 @@ GDT_Start:
         dd 0
 
     code_descriptor:
-        dw 0xffff       ;limit
-        dw 0            ;16 bits +
-        db 0            ;8 bits = 24 -> First 24 bits of the base (32 bit)
-        db 10011010b    ;Pres, priv, tyope + Type flags
+        dw 0xffff       ; limit
+        dw 0            ; 16 bits +
+        db 0            ; 8 bits = 24 -> First 24 bits of the base (32 bit)
+        db 10011010b    ; Pres, priv, type + Type flags
 
-        db 11001111b    ;Other flags + limit
-        db 00000000b    ;Last 8 bits of the base (32 bit)
+        db 11001111b    ; Other flags + limit
+        db 00000000b    ; Last 8 bits of the base (32 bit)
 
     data_destriptor:
-        ;Same as above but flags type flags changed: 1010 -> 0010
+        ; Same as above but flags type flags changed: 1010 -> 0010
         dw 0xffff
         dw 0
         db 0

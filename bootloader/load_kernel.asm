@@ -1,6 +1,7 @@
 [bits 16]
 
 KERNEL_SECTORS equ 32
+KERNEL_LOCATION equ 0x1000
 
 
 load_kernel:

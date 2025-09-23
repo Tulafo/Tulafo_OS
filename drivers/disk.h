@@ -10,5 +10,4 @@
 int disk_init(void);
 
 int8_t ATA_read_sectors(uint8_t drive, uint32_t start_sector, uint32_t count, void* buffer);
-
-
+int8_t ATA_write_sectors(uint8_t drive, uint32_t start_sector, uint32_t count, void* buffer);

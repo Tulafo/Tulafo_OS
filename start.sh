@@ -28,7 +28,7 @@ rm "stage_1.bin" "stage_2.bin"
 cd ..
 
 boot_filesize=$(stat -c%s ./boot.bin)
-padding_size=$((1048576 - boot_filesize))
+padding_size=$((512*2048 - $boot_filesize))
 
 dd if=/dev/zero of=padding.bin bs=1 count=$padding_size
 cat boot.bin padding.bin >> full_boot.bin

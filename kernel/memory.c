@@ -161,9 +161,6 @@ void* realloc(void* data, size_t bytes){
     }
 
     void* out = malloc(bytes);
-    if(!out){
-        return nullptr;
-    }
 
     size_t copy_size = 0;
 

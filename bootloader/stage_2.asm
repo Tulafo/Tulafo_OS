@@ -1,8 +1,6 @@
 [org 0x7e00]
 [bits 16]
 
-KERNEL_LOCATION equ 0x1000
-
 _stage_2_start:
     mov [HARD_DISK], dh
     mov [BOOT_DISK], dl

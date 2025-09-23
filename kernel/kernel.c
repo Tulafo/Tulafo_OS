@@ -21,8 +21,11 @@ void init(){
 extern int main(){
     init();
 
+    while(1){
+        console_in();
+    }
     
-    return 1;
+    return 0;
 }
 
 

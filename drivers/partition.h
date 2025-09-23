@@ -8,7 +8,7 @@ typedef enum {
 } Partition_Type;
 
 typedef struct {
-    uint8_t status;           // 0x80 = bootable, 0x00 = inactive
+    uint8_t status;           // 0x80 = bootable, 0x00 = non bootable
     uint8_t chs_start[3];     // CHS start address
     uint8_t type;             // Partition type
     uint8_t chs_end[3];       // CHS end address
